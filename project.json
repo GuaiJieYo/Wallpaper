@@ -1,0 +1,25 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "东方project动态壁纸 \n\n画师：NINA \nP站ID：4364687\n原图：\nhttp://www.pixiv.net/member_illust.php?mode=medium&illust_id=59888608",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0.4196078431372549 0.5137254901960784 0.0196078431372549"
+			}
+		}
+	},
+	"monetization" : false,
+	"preview" : "preview.jpg",
+	"tags" : [ "Anime" ],
+	"title" : "东方Project-灵梦&魔理沙-精细动态壁纸",
+	"type" : "web",
+	"visibility" : "public",
+	"workshopid" : "838289251"
+}

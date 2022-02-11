@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>东方Project壁纸</title>
+  </head>
+  <body>
+    <div id="hello"></div>
+    <div id="time"></div>
+    <div id="videoBox">
+      <video loop autoplay src="./bg.webm">
+          你的浏览器太拉了,不支持播放壁纸,快去换个浏览器吧!
+      </video>
+    </div>
+    <div id="audioBox">
+      <div class="player">
+        <div class="info">
+          <div id="title" title="点我复制"></div>
+          <div id="author" title="点我复制"></div>
+          <div id="ctime">00:00   /   00:00</div>
+        </div>
+        <div class="button">
+          <button id="last" class="iconfont icon-shangyishou"></button>
+          <button id="play" class="iconfont icon-bofang"></button>
+          <button id="next" class="iconfont icon-xiayishou"></button>
+        </div>
+        <div class="icon"></div>
+      </div>
+      <audio id="muisc" controls></audio>
+    </div>
+  </body>
+<script>
+const config = {
+  歌单id:913908853,//这里是网易云歌单的ID 可以换成你自己的
+  时间:true,//右上角的时间
+  问候:true,//每日打开壁纸后的问候语
+  点击特效:false,//点击桌面时的鼠标特效
+};
+var hello = document.getElementById("hello");
+var player = document.getElementById("muisc");
+var button = document.querySelector(".icon");
+var title = document.getElementById("title");
+var author = document.getElementById("author");
+var last = document.getElementById("last");
+var play = document.getElementById("play");
+var next = document.getElementById("next");
+var ctime = document.getElementById("ctime");
+var num = 0;
+var xhr = new XMLHttpRequest();
+xhr.open('get', 'https://api.injahow.cn/meting/?server=netease&type=playlist&id='+config.歌单id);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+    var text = JSON.parse(xhr.responseText);
+    var max = count(text);
+    title.setAttribute("playid",num);
+    player.src = text[num].url;
+    button.style.backgroundImage = "url('"+text[num].pic+"')";
+    title.innerText = text[num].name;
+    author.innerText = text[num].artist;
+
+    player.onended = next.onclick = function () {//下一首
+      if (++num >= max) {
+        num = 0;
+      }
+      title.setAttribute("playid",num);
+      play.className = "iconfont icon-zanting";
+      player.src = text[num].url;
+      button.style.backgroundImage = "url('"+text[num].pic+"')";
+      title.innerText = text[num].name;
+      author.innerText = text[num].artist;
+      player.play();
+      button.className = "icon retation";
+      }
+    
+      last.onclick = function () {//上一曲
+      if (title.getAttribute("playid") - 1 == -1) {
+        num = max - 1;
+      }else {
+        num = title.getAttribute("playid") - 1;
+      }
+      title.setAttribute("playid",num);
+      play.className = "iconfont icon-zanting";
+      player.src = text[num].url;
+      button.style.backgroundImage = "url('"+text[num].pic+"')";
+      title.innerText = text[num].name;
+      author.innerText = text[num].artist;
+      player.play();
+      button.className = "icon retation";
+    }
+      
+    }
+  }
+xhr.send();
+
+button.onclick = play.onclick = function () {//播放与暂停
+  if (player.paused) {
+    play.className = "iconfont icon-zanting";
+    button.className = "icon retation";
+    player.play();
+  }else {
+    play.className = "iconfont icon-bofang";
+    button.className = "icon retation paused";
+    player.pause();
+  }
+}
+
+title.onclick = function () {//曲名复制
+  const selection = document.getSelection();
+  const range = document.createRange();
+  var rangeNodeDom = document.querySelector("#title");
+  range.selectNode(rangeNodeDom);
+  selection.removeAllRanges();
+  selection.addRange(range);
+	document.execCommand('copy');
+	window.getSelection().empty();
+}
+
+author.onclick = function () {//作者复制
+  const selection = document.getSelection();
+  const range = document.createRange();
+  var rangeNodeDom = document.querySelector("#author");
+  range.selectNode(rangeNodeDom);
+  selection.removeAllRanges();
+  selection.addRange(range);
+	document.execCommand('copy');
+	window.getSelection().empty();
+}
+
+player.addEventListener("timeupdate",function () {//获取播放器进度
+  var currenttime = parseInt(player.currentTime);
+  var totaltime = parseInt(player.duration);
+  ctime.innerText = formatSeconds(currenttime) + "   /  " +formatSeconds(totaltime);
+});
+
+function formatSeconds(value) {//计算时长
+    var theTime = parseInt(value); 
+    var theTime1 = 0;
+    var result = "";
+    if(theTime >= 60) {
+        theTime1 = parseInt(theTime/60);
+        theTime = parseInt(theTime%60);
+    }
+    if(theTime >= 0 && theTime < 10){
+        result = "0"+parseInt(theTime);
+    }else {
+        result = parseInt(theTime);
+    }
+    if(theTime1 >= 0 && theTime1 < 10) {
+        result = "0"+parseInt(theTime1)+":"+result;
+    }else {
+        result = parseInt(theTime1)+":"+result;
+    }
+    return result; 
+}
+
+if (config.时间 == true) {
+  setInterval("time()", 1000);
+  function time() {
+    var time = new Date();
+    var div = document.getElementById("time");
+    var main = time.toTimeString().replace(" GMT+0800 (China Standard Time)","").replace(" GMT+0800 (中国标准时间)","");
+    div.innerText = main;
+  }
+}
+if (config.问候 == true) {
+  wh();
+}
+
+function wh() {
+  var time = new Date();
+  var h = time.getHours();
+  const randomHex = () => `#${Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0")}`;
+  hello.style.color = randomHex();
+  setTimeout(() => {
+    hello.className = "hello-hidden";
+    setTimeout(() => {
+      hello.style.display = "none";
+    }, 4000);
+  }, 3000);
+  if (h < 6) {
+    hello.innerText = "❤ 凌晨好,要早点休息哦!";
+  }else if (h < 11) {
+    hello.innerText = "❤ 早上好,今天又是元气满满的一天哟!"
+  }else if (h < 13) {
+    hello.innerText = "❤ 中午好,记得按时吃午饭哦!"
+  }else if (h < 19) {
+    hello.innerText = "❤ 下午好,要记得放松自己哦!"
+  }else if (h < 23) {
+    hello.innerText = "❤ 晚上好,记得早点休息,祝你有个好梦~"
+  }else {
+    hello.innerText = "❤ 午夜好,早点休息对身体好,记得早点休息哦!"
+  }
+}
+
+function count(o) {
+  var t = typeof o;
+  if (t == 'string') {
+    return o.length;
+  }else if (t == 'object') {
+    var n = 0;
+    for(var i in o) {
+      n++;
+    }
+    return n;
+  }
+  return false;
+}
+
+console.log(unescape("\u6b64\u9875\u9762\u4f5c\u8005\u003a\u602a\u6770\u0020\u5f00\u6e90\u5730\u5740\u003a\u0068\u0074\u0074\u0070\u0073\u003a\u002f\u002f\u0067\u0069\u0074\u0068\u0075\u0062\u002e\u0063\u006f\u006d\u002f\u0047\u0075\u0061\u0069\u004a\u0069\u0065\u0059\u006f\u002f\u0057\u0061\u006c\u006c\u0070\u0061\u0070\u0065\u0072\u002f"));
+
+if (config.点击特效 == true) {//点击特效
+  function clickEffect() {
+  let balls = [];
+  let longPressed = false;
+  let longPress;
+  let multiplier = 0;
+  let width, height;
+  let origin;
+  let normal;
+  let ctx;
+  const colours = ["#F73859", "#14FFEC", "#00E0FF", "#FF99FE", "#FAF15D"];
+  const canvas = document.createElement("canvas");
+  document.body.appendChild(canvas);
+  canvas.setAttribute("style", "width: 100%; height: 100%; top: 0; left: 0; z-index: 99999; position: fixed; pointer-events: none;");
+  const pointer = document.createElement("span");
+  pointer.classList.add("pointer");
+  document.body.appendChild(pointer);
+ 
+  if (canvas.getContext && window.addEventListener) {
+    ctx = canvas.getContext("2d");
+    updateSize();
+    window.addEventListener('resize', updateSize, false);
+    loop();
+    window.addEventListener("mousedown", function(e) {
+      pushBalls(randBetween(10, 20), e.clientX, e.clientY);
+      document.body.classList.add("is-pressed");
+      longPress = setTimeout(function(){
+        document.body.classList.add("is-longpress");
+        longPressed = true;
+      }, 500);
+    }, false);
+    window.addEventListener("mouseup", function(e) {
+      clearInterval(longPress);
+      if (longPressed == true) {
+        document.body.classList.remove("is-longpress");
+        pushBalls(randBetween(50 + Math.ceil(multiplier), 100 + Math.ceil(multiplier)), e.clientX, e.clientY);
+        longPressed = false;
+      }
+      document.body.classList.remove("is-pressed");
+    }, false);
+    window.addEventListener("mousemove", function(e) {
+      let x = e.clientX;
+      let y = e.clientY;
+      pointer.style.top = y + "px";
+      pointer.style.left = x + "px";
+    }, false);
+  } else {
+    console.log("你的浏览器不支持点击效果!");
+  }
+ 
+ 
+  function updateSize() {
+    canvas.width = window.innerWidth * 2;
+    canvas.height = window.innerHeight * 2;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    ctx.scale(2, 2);
+    width = (canvas.width = window.innerWidth);
+    height = (canvas.height = window.innerHeight);
+    origin = {
+      x: width / 2,
+      y: height / 2
+    };
+    normal = {
+      x: width / 2,
+      y: height / 2
+    };
+  }
+  class Ball {
+    constructor(x = origin.x, y = origin.y) {
+      this.x = x;
+      this.y = y;
+      this.angle = Math.PI * 2 * Math.random();
+      if (longPressed == true) {
+        this.multiplier = randBetween(14 + multiplier, 15 + multiplier);
+      } else {
+        this.multiplier = randBetween(6, 12);
+      }
+      this.vx = (this.multiplier + Math.random() * 0.5) * Math.cos(this.angle);
+      this.vy = (this.multiplier + Math.random() * 0.5) * Math.sin(this.angle);
+      this.r = randBetween(8, 12) + 3 * Math.random();
+      this.color = colours[Math.floor(Math.random() * colours.length)];
+    }
+    update() {
+      this.x += this.vx - normal.x;
+      this.y += this.vy - normal.y;
+      normal.x = -2 / window.innerWidth * Math.sin(this.angle);
+      normal.y = -2 / window.innerHeight * Math.cos(this.angle);
+      this.r -= 0.3;
+      this.vx *= 0.9;
+      this.vy *= 0.9;
+    }
+  }
+ 
+  function pushBalls(count = 1, x = origin.x, y = origin.y) {
+    for (let i = 0; i < count; i++) {
+      balls.push(new Ball(x, y));
+    }
+  }
+ 
+  function randBetween(min, max) {
+    return Math.floor(Math.random() * max) + min;
+  }
+ 
+  function loop() {
+    ctx.fillStyle = "rgba(255, 255, 255, 0)";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < balls.length; i++) {
+      let b = balls[i];
+      if (b.r < 0) continue;
+      ctx.fillStyle = b.color;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2, false);
+      ctx.fill();
+      b.update();
+    }
+    if (longPressed == true) {
+      multiplier += 0.2;
+    } else if (!longPressed && multiplier >= 0) {
+      multiplier -= 0.4;
+    }
+    removeBall();
+    requestAnimationFrame(loop);
+  }
+ 
+  function removeBall() {
+    for (let i = 0; i < balls.length; i++) {
+      let b = balls[i];
+      if (b.x + b.r < 0 || b.x - b.r > width || b.y + b.r < 0 || b.y - b.r > height || b.r < 0) {
+        balls.splice(i, 1);
+      }
+    }
+  }
+}
+clickEffect();
+}
+</script>
+</html>
