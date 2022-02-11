@@ -9,9 +9,8 @@
 
 # 使用教程
 1. 在Releases中下载最新的压缩包  
-2. 在C:\Program Files (x86)\Steam\SteamApps\common\wallpaper_engine\projects\defaultprojects\ 解压下载的压缩包  
-3. 在visibility.json中最后一排（括号上面一排）添加一个"东方project" : true  然后保存
-4. 返回wallpaper engine就能看到了（如果没看到就重启wallpaper engine）  
+2. 在C:\Program Files (x86)\Steam\SteamApps\common\wallpaper_engine\projects\myprojects\ 解压下载的压缩包  
+3. 返回wallpaper engine就能看到了（如果没看到就重启wallpaper engine）  
 
 # 自定义教程
 ps:音乐播放器在右下角哦  
