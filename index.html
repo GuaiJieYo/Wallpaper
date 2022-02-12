@@ -10,16 +10,14 @@
     <div id="hello"></div>
     <div id="time"></div>
     <div id="videoBox">
-      <video loop autoplay src="./bg.webm">
-          你的浏览器太拉了,不支持播放壁纸,快去换个浏览器吧!
-      </video>
+      <video loop autoplay src="./bg.webm"></video>
     </div>
     <div id="audioBox">
       <div class="player">
         <div class="info">
           <div id="title" title="点我复制"></div>
           <div id="author" title="点我复制"></div>
-          <div id="ctime">00:00   /   00:00</div>
+          <div id="ctime"></div>
         </div>
         <div class="button">
           <button id="last" class="iconfont icon-shangyishou"></button>
@@ -33,7 +31,7 @@
   </body>
 <script>
 const config = {
-  歌单id:913908853,//这里是网易云歌单的ID 可以换成你自己的
+  歌单id:79510274,//这里是网易云歌单的ID 可以换成你自己的
   时间:true,//右上角的时间
   问候:true,//每日打开壁纸后的问候语
   点击特效:false,//点击桌面时的鼠标特效
@@ -165,10 +163,7 @@ if (config.时间 == true) {
   }
 }
 if (config.问候 == true) {
-  wh();
-}
-
-function wh() {
+  function wh() {
   var time = new Date();
   var h = time.getHours();
   const randomHex = () => `#${Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0")}`;
@@ -191,6 +186,7 @@ function wh() {
     hello.innerText = "❤ 晚上好,记得早点休息,祝你有个好梦~"
   }else {
     hello.innerText = "❤ 午夜好,早点休息对身体好,记得早点休息哦!"
+  }
   }
 }
 
@@ -257,7 +253,7 @@ if (config.点击特效 == true) {//点击特效
       pointer.style.left = x + "px";
     }, false);
   } else {
-    console.log("你的浏览器不支持点击效果!");
+    console.log("你的浏览器太逊了,不支持点击效果!");
   }
  
  
