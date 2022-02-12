@@ -17,7 +17,7 @@
         <div class="info">
           <div id="title" title="点我复制"></div>
           <div id="author" title="点我复制"></div>
-          <div id="ctime"></div>
+          <div id="ctime">00:00  /  00:00</div>
         </div>
         <div class="button">
           <button id="last" class="iconfont icon-shangyishou"></button>
@@ -129,7 +129,7 @@ author.onclick = function () {//作者复制
 player.addEventListener("timeupdate",function () {//获取播放器进度
   var currenttime = parseInt(player.currentTime);
   var totaltime = parseInt(player.duration);
-  ctime.innerText = formatSeconds(currenttime) + "   /  " +formatSeconds(totaltime);
+  ctime.innerText = formatSeconds(currenttime) + "  /  " +formatSeconds(totaltime);
 });
 
 function formatSeconds(value) {//计算时长
