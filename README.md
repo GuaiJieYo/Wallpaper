@@ -5,7 +5,7 @@
 本人只是在原作基础之上修改了播放器增加了时间显示等等东西  
 若有侵权联系我删除 我的邮箱guaijieaz@foxmail.com  
 如果在使用过程中有出现BUG请在Issues中指出，我会尽量修复的~  
-你可以随意修改本仓库里的文件但要遵循MIT协议
+你可以随意修改本仓库里的文件但要遵循Apache协议
 
 # 使用教程
 1. 在[这里](https://github.com/GuaiJieYo/Wallpaper/archive/refs/heads/main.zip)下载最新的Source code (zip)  
