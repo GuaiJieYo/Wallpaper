@@ -8,7 +8,7 @@
 你可以随意修改本仓库里的文件但要遵循MIT协议
 
 # 使用教程
-1. 在[Releases](https://github.com/GuaiJieYo/Wallpaper/releases/latest)中下载最新的Source code (zip)  
+1. 在[这里](https://github.com/GuaiJieYo/Wallpaper/archive/refs/heads/main.zip)下载最新的Source code (zip)  
 2. 在C:\Program Files (x86)\Steam\SteamApps\common\wallpaper_engine\projects\myprojects\ 解压下载的压缩包  
 3. 返回wallpaper engine就能看到了（如果没看到就重启wallpaper engine）  
 
